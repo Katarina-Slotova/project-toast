@@ -1,22 +1,19 @@
 import React from 'react'
 
+import useKeydown from '../../hooks/use-keydown'
+
 export const ToastContext = React.createContext()
 
 function ToastProvider({ children }) {
   const [toasts, setToasts] = React.useState([])
 
-	// dismiss all toasts by pressing Escape key
-  React.useEffect(() => {
-    function handleKeyDown(event) {
-      return event.key === 'Escape' ? setToasts([]) : ''
-    }
+  // memoization used to avoid running the code for dismissing all toasts every time toasts array gets updated
+  // every time toasts is updated, this component's code reruns and a new setToasts function is created
+  // because callback is listed as a dependency in the custom hook, it'll rerun all of the code in the hook because it thinks it's a brand new callback function
+  const handleEscape = React.useCallback(() => setToasts([]), [])
 
-    document.addEventListener('keydown', handleKeyDown)
-
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown)
-    }
-  }, [])
+  // dismiss all toasts by pressing Escape key
+  useKeydown('Escape', handleEscape)
 
   // create a toast
   function createToast(message, variant) {
