@@ -11,7 +11,7 @@ import { ToastContext } from '../ToastProvider'
 const VARIANT_OPTIONS = ['notice', 'warning', 'success', 'error']
 
 function ToastPlayground() {
-  const { createToast } = React.useContext(ToastContext)
+  const { createToast, setToasts } = React.useContext(ToastContext)
   const [message, setMessage] = React.useState('')
   const [variant, setVariant] = React.useState(VARIANT_OPTIONS[0])
 
@@ -29,7 +29,7 @@ function ToastPlayground() {
         <h1>Toast Playground</h1>
       </header>
 
-      <ToastShelf></ToastShelf>
+      <ToastShelf />
 
       <form onSubmit={submitToast}>
         <div className={styles.controlsWrapper}>
